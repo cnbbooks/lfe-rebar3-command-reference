@@ -430,13 +430,21 @@ project, with many updates and using all the latest approaches developed in
 
 <p><a href="https://github.com/lfe-rebar3/rebar3_lfe/issues?q=is%3Aissue+is%3Aopen+label%3Afeature">More coming soon!</a></p>
 <h1 id='setup'>Setup</h1>
-<p>Add the plugin to your <code>rebar.config</code> (stable):</p>
+<p>After installing <code>rebar3</code>, the only thing you need to do in order to take full
+advantage of the LFE rebar3 plugin is add it to the plugins in your global
+<code>rebar.config</code> file.</p>
+
+<blockquote>
+<p>To use the latest stable release, update your <code>rebar.config</code> to:</p>
+</blockquote>
 <div class="highlight"><pre class="highlight erlang tab-erlang"><code><span class="p">{</span><span class="n">plugins</span><span class="p">,</span> <span class="p">[</span>
   <span class="p">{</span><span class="n">rebar3_lfe</span><span class="p">,</span>
     <span class="p">{</span><span class="n">git</span><span class="p">,</span> <span class="s">"https://github.com/lfe-rebar3/rebar2_lfe.git"</span><span class="p">,</span> <span class="p">{</span><span class="n">tag</span><span class="p">,</span> <span class="s">"0.2.0"</span><span class="p">}}}</span>
 <span class="p">]}.</span>
 </code></pre></div>
-<p>Or, if you want to use the current development branch (unstable):</p>
+<blockquote>
+<p>If you want to use the current development branch (unstable):</p>
+</blockquote>
 <div class="highlight"><pre class="highlight erlang tab-erlang"><code><span class="p">{</span><span class="n">plugins</span><span class="p">,</span> <span class="p">[</span>
   <span class="p">{</span><span class="n">rebar3_lfe</span><span class="p">,</span>
     <span class="p">{</span><span class="n">git</span><span class="p">,</span> <span class="s">"https://github.com/lfe-rebar3/rebar2_lfe.git"</span><span class="p">,</span> <span class="p">{</span><span class="n">tag</span><span class="p">,</span> <span class="s">"0.3.0-dev"</span><span class="p">}}}</span>
@@ -464,6 +472,21 @@ scripts, or other libraries.</p>
 ===&gt; Writing my-lfe-lib/.gitignore
 ===&gt; Writing my-lfe-lib/src/my-lfe-lib.lfe
 ===&gt; Writing my-lfe-lib/src/my-lfe-lib.app.src
+</code></pre></div>
+<blockquote>
+<p>You can also name project project:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 new lfe-lib forty-two
+</code></pre></div>
+<blockquote>
+<p>Which will produce the following:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>===&gt; Writing forty-two/README.md
+===&gt; Writing forty-two/LICENSE
+===&gt; Writing forty-two/rebar.config
+===&gt; Writing forty-two/.gitignore
+===&gt; Writing forty-two/src/forty-two.lfe
+===&gt; Writing forty-two/src/forty-two.app.src
 </code></pre></div><h2 id='running-the-repl'>Running the REPL</h2>
 <blockquote>
 <p>A project and all of its dependencies may be interacted with via the LFE REPL by doing the following:</p>
