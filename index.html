@@ -329,6 +329,12 @@
                   <li>
                     <a href="#creating-projects" class="toc-h2 toc-link" data-title="Creating Projects">Creating Projects</a>
                   </li>
+                  <li>
+                    <a href="#cleanup" class="toc-h2 toc-link" data-title="Cleanup">Cleanup</a>
+                  </li>
+                  <li>
+                    <a href="#metadata" class="toc-h2 toc-link" data-title="Metadata">Metadata</a>
+                  </li>
               </ul>
           </li>
       </ul>
@@ -636,6 +642,106 @@ rebar3 lfe repl
 <span class="err">#</span><span class="nv">Pid&lt;0.205.0&gt;</span>
 <span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">myapp:echo</span> <span class="s">"testing the supervised gen_server ..."</span><span class="p">)</span>
 <span class="s">"testing the supervised gen_server ..."</span>
+</code></pre></div><h3 id='otp-release'>OTP Release</h3>
+<p>If you&#39;re going to be running an LFE application in production, you will very
+likely want to do so using the &quot;release&quot; functionality provided by OTP.</p>
+
+<blockquote>
+<p>Create a release-based project with:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 new lfe-release prod-lfe
+</code></pre></div><div class="highlight"><pre class="highlight plaintext"><code>===&gt; Writing prod-lfe/README.md
+===&gt; Writing prod-lfe/LICENSE
+===&gt; Writing prod-lfe/rebar.config
+===&gt; Writing prod-lfe/.gitignore
+===&gt; Writing prod-lfe/apps/prod-lfe/src/prod-lfe.lfe
+===&gt; Writing prod-lfe/apps/prod-lfe/src/prod-lfe-app.lfe
+===&gt; Writing prod-lfe/apps/prod-lfe/src/prod-lfe-sup.lfe
+===&gt; Writing prod-lfe/apps/prod-lfe/src/prod-lfe.app.src
+===&gt; Writing prod-lfe/config/sys.config
+===&gt; Writing prod-lfe/config/vm.args
+</code></pre></div>
+<blockquote>
+<p>Start up the application:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe run-release start
+</code></pre></div>
+<blockquote>
+<p>Check the status of the application:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe run-release ping
+</code></pre></div><div class="highlight"><pre class="highlight plaintext"><code>pong
+</code></pre></div>
+<p>If your <code>ping</code> doesn&#39;t get a <code>pong</code> after starting the release, this is a known
+issue that is being investigated in the following ticket:</p>
+
+<ul>
+<li>https://github.com/lfe-rebar3/rebar3_lfe/issues/33</li>
+</ul>
+
+<blockquote>
+<p>The current workaround for a relese that doesn&#39;t start is simply to run the following again:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 release
+rebar3 lfe run-release start
+rebar3 lfe run-release ping
+</code></pre></div>
+<p>In addition to using the LFE rebar3 commands to start the application,
+you can start up a release console and then switch to the LFE REPL.</p>
+
+<blockquote>
+<p>Start the console:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>./_build/default/rel/prod-lfe/bin/prod-lfe console
+</code></pre></div><div class="highlight"><pre class="highlight erlang tab-erlang"><code><span class="nv">Eshell</span> <span class="nv">V11</span><span class="p">.</span><span class="mi">0</span>  <span class="p">(</span><span class="n">abort</span> <span class="n">with</span> <span class="err">^</span><span class="nv">G</span><span class="p">)</span>
+<span class="p">(</span><span class="n">prod</span><span class="o">-</span><span class="n">app</span><span class="p">@</span><span class="n">spacemac</span><span class="p">)</span><span class="mi">1</span><span class="o">&gt;</span> <span class="nn">lfe_shell</span><span class="p">:</span><span class="nf">start</span><span class="p">().</span>
+</code></pre></div><div class="highlight"><pre class="highlight common_lisp"><code><span class="p">(</span><span class="nv">prod-app@spacemac</span><span class="p">)</span><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">erlang:whereis</span> <span class="ss">'prod-lfe-sup</span><span class="p">)</span>
+<span class="err">#</span><span class="nv">Pid&lt;0.351.0&gt;</span>
+<span class="p">(</span><span class="nv">prod-app@spacemac</span><span class="p">)</span><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">prod-lfe:echo</span> <span class="s">"testing from production!"</span><span class="p">)</span>
+<span class="s">"testing from production!"</span>
+</code></pre></div><h2 id='cleanup'>Cleanup</h2>
+<p>There are a handful of tasks the author of the plugin as found useful when
+debugging LFE applications, rebar3 plugins, etc. These include various
+&quot;cleanup&quot; tasks that are not currently supported by <code>rebar3</code> (or whose support
+is problematic).</p>
+
+<blockquote>
+<p>Remove the apps&#39; <code>ebin/*</code> files:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe clean
+</code></pre></div>
+<blockquote>
+<p>Remove the <code>_build</code> directory:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe clean-build
+</code></pre></div>
+<blockquote>
+<p>Remove the the cached directories for the app and the rebar3_lfe plugin, both global and local:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe clean-cache
+</code></pre></div>
+<blockquote>
+<p>Perform all clean tasks:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe clean-all
+</code></pre></div><h2 id='metadata'>Metadata</h2>
+<p>The tasks in this section relate to obtaining metadata about a project, LFE,
+the LFE rebar3 plugin, and the Erlang release installed/active on your machine.</p>
+
+<blockquote>
+<p>Get versions:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe versions
+</code></pre></div><div class="highlight"><pre class="highlight common_lisp"><code><span class="p">(</span><span class="o">#(</span><span class="nv">apps</span>
+   <span class="p">(</span><span class="o">#(</span><span class="nv">prod-app</span> <span class="nv">git</span><span class="p">)))</span>
+ <span class="o">#(</span><span class="nv">languages</span>
+   <span class="p">(</span><span class="o">#(</span><span class="nv">lfe</span> <span class="s">"1.3-dev"</span><span class="p">)</span>
+    <span class="o">#(</span><span class="nv">erlang</span> <span class="s">"23"</span><span class="p">)</span>
+    <span class="o">#(</span><span class="nv">emulator</span> <span class="s">"11.0"</span><span class="p">)</span>
+    <span class="o">#(</span><span class="nv">driver_version</span> <span class="s">"3.3"</span><span class="p">)))</span>
+ <span class="o">#(</span><span class="nv">tooling</span>
+   <span class="p">(</span><span class="o">#(</span><span class="nv">rebar</span> <span class="s">"3.10.0"</span><span class="p">)</span>
+    <span class="o">#(</span><span class="nv">rebar3_lfe</span> <span class="s">"0.1.0"</span><span class="p">))))</span>
 </code></pre></div>
 <!-- Named page links below: /-->
 
