@@ -321,18 +321,15 @@
             <a href="#reference" class="toc-h1 toc-link" data-title="Reference">Reference</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#creating-projects" class="toc-h2 toc-link" data-title="Creating Projects">Creating Projects</a>
+                    <a href="#compiling" class="toc-h2 toc-link" data-title="Compiling">Compiling</a>
                   </li>
                   <li>
                     <a href="#running-the-repl" class="toc-h2 toc-link" data-title="Running the REPL">Running the REPL</a>
                   </li>
                   <li>
-                    <a href="#compiling" class="toc-h2 toc-link" data-title="Compiling">Compiling</a>
+                    <a href="#creating-projects" class="toc-h2 toc-link" data-title="Creating Projects">Creating Projects</a>
                   </li>
               </ul>
-          </li>
-          <li>
-            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
           </li>
       </ul>
         <ul class="toc-footer">
@@ -449,7 +446,37 @@ advantage of the LFE rebar3 plugin is add it to the plugins in your global
   <span class="p">{</span><span class="n">rebar3_lfe</span><span class="p">,</span>
     <span class="p">{</span><span class="n">git</span><span class="p">,</span> <span class="s">"https://github.com/lfe-rebar3/rebar2_lfe.git"</span><span class="p">,</span> <span class="p">{</span><span class="n">tag</span><span class="p">,</span> <span class="s">"0.3.0-dev"</span><span class="p">}}}</span>
 <span class="p">]}.</span>
-</code></pre></div><h1 id='reference'>Reference</h1><h2 id='creating-projects'>Creating Projects</h2>
+</code></pre></div><h1 id='reference'>Reference</h1><h2 id='compiling'>Compiling</h2>
+<p>The single most imporant convenience provided by the LFE rebar3 plugin is
+arguably the compiler. This allows any LFE project to be downloaded,
+compile, and used by any BEAM language that is also using rebar3 to manage
+its dependencies, etc.</p>
+
+<blockquote>
+<p>To compile an LFE project:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe compile
+</code></pre></div>
+<p>If you are publishing your LFE code, or using it in another project, you&#39;ll
+want to update your <code>rebar.config</code> file so that it is compile when a user
+(or script) executes the regular <code>rebar3 compile</code> command.</p>
+
+<blockquote>
+<p>To ensure your LFE code will compile in other projects, add the following to your project&#39;s <code>rebar.config</code>:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight erlang tab-erlang"><code><span class="p">{</span><span class="n">provider_hooks</span><span class="p">,</span> <span class="p">[</span>
+  <span class="p">{</span><span class="n">pre</span><span class="p">,</span> <span class="p">[{</span><span class="n">compile</span><span class="p">,</span> <span class="p">{</span><span class="n">lfe</span><span class="p">,</span> <span class="n">compile</span><span class="p">}}]}</span>
+  <span class="p">]}.</span>
+</code></pre></div><h2 id='running-the-repl'>Running the REPL</h2>
+<p>An LFE project and all of its dependencies may be interacted with via a REPL
+that is started with the LFE rebar3 plguin, as rebar3 sets all of the correct
+library locations for use by shells and REPLs.</p>
+
+<blockquote>
+<p>To start up a REPL:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe repl
+</code></pre></div><h2 id='creating-projects'>Creating Projects</h2>
 <p>The <code>rebar3_lfe</code> plugin is capable of creating several common project layouts.
 The following sub-sections provide details on those that are currently
 supported.</p>
@@ -474,7 +501,7 @@ scripts, or other libraries.</p>
 ===&gt; Writing my-lfe-lib/src/my-lfe-lib.app.src
 </code></pre></div>
 <blockquote>
-<p>You can also name project project:</p>
+<p>You can also explicitely name your project:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 new lfe-lib forty-two
 </code></pre></div>
@@ -487,76 +514,130 @@ scripts, or other libraries.</p>
 ===&gt; Writing forty-two/.gitignore
 ===&gt; Writing forty-two/src/forty-two.lfe
 ===&gt; Writing forty-two/src/forty-two.app.src
-</code></pre></div><h2 id='running-the-repl'>Running the REPL</h2>
+</code></pre></div>
+<p>As mentioned abouve, the REPL offers a nice way to quickly interact your new
+project.</p>
+
 <blockquote>
-<p>A project and all of its dependencies may be interacted with via the LFE REPL by doing the following:</p>
+<p>Start the REPL:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe repl
-</code></pre></div><h2 id='compiling'>Compiling</h2>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nb">cd </span>forty-two
+rebar3 lfe repl
+</code></pre></div>
 <blockquote>
-<p>To compile an LFE project:</p>
+<p>Call the generated/sample LFE function:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe compile
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">mything:my-fun</span><span class="p">)</span>
+<span class="nv">hello-world</span>
+</code></pre></div><h3 id='main-script'><code>main</code> Script</h3>
+<p>LFE supports the creation of scripts, and these can be integrated with
+libraries, allowing for the best of both worlds: a simple collection of
+useful functions (library) and a means of running them from the command
+line.</p>
+
+<blockquote>
+<p>Create a library that also has a script with a <code>main</code> function:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>rebar3 new lfe-main special-proj
+</code></pre></div>
+<blockquote>
+<p>Which generates:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>===&gt; Writing special-proj/README.md
+===&gt; Writing special-proj/LICENSE
+===&gt; Writing special-proj/rebar.config
+===&gt; Writing special-proj/.gitignore
+===&gt; Writing special-proj/src/special-proj.lfe
+===&gt; Writing special-proj/scripts/main.lfe
+===&gt; Writing special-proj/src/special-proj.app.src
+</code></pre></div>
+<blockquote>
+<p>The generated project&#39;s <code>main</code> script + function may then be run with:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nb">cd </span>mymain
+rebar3 lfe run <span class="nt">--</span> 42
+</code></pre></div>
+<blockquote>
+<p>Which will produce the following output:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>Running script '/usr/local/bin/rebar3' with args [&lt;&lt;"42"&gt;&gt;] ...
+'hello-worl
+</code></pre></div>
+<blockquote>
+<p>To create an escript-based project:</p>
+</blockquote>
+<h3 id='escript'>escript</h3>
+<p>The LFE rebar3 plugin also supports generating escript-based projects
+<em>in LFE</em>. This is similar in nature to the <code>main</code>-based project, but is more
+standard in the BEAM family of languages.</p>
+
+<blockquote>
+<p>Generate the project:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 new lfe-escript myapp
+</code></pre></div><div class="highlight"><pre class="highlight plaintext"><code>===&gt; Writing myapp/README.md
+===&gt; Writing myapp/LICENSE
+===&gt; Writing myapp/rebar.config
+===&gt; Writing myapp/.gitignore
+===&gt; Writing myapp/src/myapp.lfe
+===&gt; Writing myapp/src/myapp.app.src
+</code></pre></div>
+<blockquote>
+<p>Compile the LFE and then bundle all the code up by &quot;escriptizing&quot; it:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nb">cd </span>myapp
+rebar3 lfe compile
+rebar3 escriptize
+</code></pre></div>
+<blockquote>
+<p>Run the newly-created escript:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe run-escript 1 2 5 no <span class="s1">'3!'</span>
+</code></pre></div>
+<blockquote>
+<p>Which will display the following:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">Got</span> <span class="nv">args:</span> <span class="p">(</span><span class="s">"1"</span> <span class="s">"2"</span> <span class="s">"5"</span> <span class="s">"no"</span> <span class="s">"3!"</span><span class="p">)</span>
+<span class="nv">Answer:</span> <span class="mi">42</span>
+</code></pre></div><h3 id='otp-application'>OTP Application</h3>
+<p>In the wider Erlang community, it is very common to see applications that
+run one or more <code>gen_server</code>s (or other server behaviours) managed by a
+supervision tree (with the appropriate restart strategy defined). The LFE
+rebar3 plugin provides the ability to generate OTP <code>gen_server</code> applications
+with the server managed in a supervision tree.</p>
+
+<blockquote>
+<p>To create an LFE/OTP application:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 new lfe-app otp-lfe
+</code></pre></div><div class="highlight"><pre class="highlight plaintext"><code>===&gt; Writing otp-lfe/README.md
+===&gt; Writing otp-lfe/LICENSE
+===&gt; Writing otp-lfe/rebar.config
+===&gt; Writing otp-lfe/.gitignore
+===&gt; Writing otp-lfe/src/otp-lfe.lfe
+===&gt; Writing otp-lfe/src/otp-lfe-app.lfe
+===&gt; Writing otp-lfe/src/otp-lfe-sup.lfe
+===&gt; Writing otp-lfe/src/otp-lfe.app.src
+</code></pre></div>
+<p>We can use the plugin&#39;s REPL command to demonstrate usage.</p>
+
+<blockquote>
+<p>Start the REPL:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nb">cd </span>otp-lfe
+rebar3 lfe repl
+</code></pre></div>
+<blockquote>
+<p>Start the app, make sure the supervisor is running, and make an API call to the <code>gen_server</code>:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">application:ensure_all_started</span> <span class="ss">'myapp</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">ok</span> <span class="p">(</span><span class="nv">myapp</span><span class="p">))</span>
+<span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">erlang:whereis</span> <span class="ss">'myapp-sup</span><span class="p">)</span>
+<span class="err">#</span><span class="nv">Pid&lt;0.205.0&gt;</span>
+<span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">myapp:echo</span> <span class="s">"testing the supervised gen_server ..."</span><span class="p">)</span>
+<span class="s">"testing the supervised gen_server ..."</span>
 </code></pre></div>
 <!-- Named page links below: /-->
-<h1 id='errors'>Errors</h1>
-<aside class="notice">
-This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
-</aside>
-
-<p>The Kittn API uses the following error codes:</p>
-
-<table><thead>
-<tr>
-<th>Error Code</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>400</td>
-<td>Bad Request -- Your request is invalid.</td>
-</tr>
-<tr>
-<td>401</td>
-<td>Unauthorized -- Your API key is wrong.</td>
-</tr>
-<tr>
-<td>403</td>
-<td>Forbidden -- The kitten requested is hidden for administrators only.</td>
-</tr>
-<tr>
-<td>404</td>
-<td>Not Found -- The specified kitten could not be found.</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
-</tr>
-<tr>
-<td>406</td>
-<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
-</tr>
-<tr>
-<td>410</td>
-<td>Gone -- The kitten requested has been removed from our servers.</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&#39;m a teapot.</td>
-</tr>
-<tr>
-<td>429</td>
-<td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
-</tr>
-<tr>
-<td>500</td>
-<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
-</tr>
-</tbody></table>
 
       </div>
       <div class="dark-box">
