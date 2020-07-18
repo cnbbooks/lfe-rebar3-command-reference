@@ -327,13 +327,22 @@
                     <a href="#running-the-repl" class="toc-h2 toc-link" data-title="Running the REPL">Running the REPL</a>
                   </li>
                   <li>
-                    <a href="#creating-projects" class="toc-h2 toc-link" data-title="Creating Projects">Creating Projects</a>
+                    <a href="#creating-libraries" class="toc-h2 toc-link" data-title="Creating Libraries">Creating Libraries</a>
                   </li>
                   <li>
-                    <a href="#cleanup" class="toc-h2 toc-link" data-title="Cleanup">Cleanup</a>
+                    <a href="#creating-main-scripts" class="toc-h2 toc-link" data-title="Creating main Scripts">Creating <code>main</code> Scripts</a>
                   </li>
                   <li>
-                    <a href="#metadata" class="toc-h2 toc-link" data-title="Metadata">Metadata</a>
+                    <a href="#creating-escripts" class="toc-h2 toc-link" data-title="Creating escripts">Creating escripts</a>
+                  </li>
+                  <li>
+                    <a href="#creating-otp-applications" class="toc-h2 toc-link" data-title="Creating OTP Applications">Creating OTP Applications</a>
+                  </li>
+                  <li>
+                    <a href="#cleanup-commands" class="toc-h2 toc-link" data-title="Cleanup Commands">Cleanup Commands</a>
+                  </li>
+                  <li>
+                    <a href="#versions" class="toc-h2 toc-link" data-title="Versions">Versions</a>
                   </li>
               </ul>
           </li>
@@ -482,11 +491,11 @@ library locations for use by shells and REPLs.</p>
 <p>To start up a REPL:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe repl
-</code></pre></div><h2 id='creating-projects'>Creating Projects</h2>
+</code></pre></div><h2 id='creating-libraries'>Creating Libraries</h2>
 <p>The <code>rebar3_lfe</code> plugin is capable of creating several common project layouts.
-The following sub-sections provide details on those that are currently
+This and following sections provide details on those that are currently
 supported.</p>
-<h3 id='library'>Library</h3>
+
 <p>Library projects are those with no running applications or scripts; they simply
 provide some core bit of functionality intended for use by applications,
 scripts, or other libraries.</p>
@@ -535,7 +544,7 @@ rebar3 lfe repl
 </blockquote>
 <div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">mything:my-fun</span><span class="p">)</span>
 <span class="nv">hello-world</span>
-</code></pre></div><h3 id='main-script'><code>main</code> Script</h3>
+</code></pre></div><h2 id='creating-main-scripts'>Creating <code>main</code> Scripts</h2>
 <p>LFE supports the creation of scripts, and these can be integrated with
 libraries, allowing for the best of both worlds: a simple collection of
 useful functions (library) and a means of running them from the command
@@ -568,17 +577,13 @@ rebar3 lfe run <span class="nt">--</span> 42
 </blockquote>
 <div class="highlight"><pre class="highlight plaintext"><code>Running script '/usr/local/bin/rebar3' with args [&lt;&lt;"42"&gt;&gt;] ...
 'hello-worl
-</code></pre></div>
-<blockquote>
-<p>To create an escript-based project:</p>
-</blockquote>
-<h3 id='escript'>escript</h3>
+</code></pre></div><h2 id='creating-escripts'>Creating escripts</h2>
 <p>The LFE rebar3 plugin also supports generating escript-based projects
 <em>in LFE</em>. This is similar in nature to the <code>main</code>-based project, but is more
 standard in the BEAM family of languages.</p>
 
 <blockquote>
-<p>Generate the project:</p>
+<p>To create an escript-based project:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 new lfe-escript myapp
 </code></pre></div><div class="highlight"><pre class="highlight plaintext"><code>===&gt; Writing myapp/README.md
@@ -605,7 +610,7 @@ rebar3 escriptize
 </blockquote>
 <div class="highlight"><pre class="highlight common_lisp"><code><span class="nv">Got</span> <span class="nv">args:</span> <span class="p">(</span><span class="s">"1"</span> <span class="s">"2"</span> <span class="s">"5"</span> <span class="s">"no"</span> <span class="s">"3!"</span><span class="p">)</span>
 <span class="nv">Answer:</span> <span class="mi">42</span>
-</code></pre></div><h3 id='otp-application'>OTP Application</h3>
+</code></pre></div><h2 id='creating-otp-applications'>Creating OTP Applications</h2>
 <p>In the wider Erlang community, it is very common to see applications that
 run one or more <code>gen_server</code>s (or other server behaviours) managed by a
 supervision tree (with the appropriate restart strategy defined). The LFE
@@ -642,7 +647,7 @@ rebar3 lfe repl
 <span class="err">#</span><span class="nv">Pid&lt;0.205.0&gt;</span>
 <span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">myapp:echo</span> <span class="s">"testing the supervised gen_server ..."</span><span class="p">)</span>
 <span class="s">"testing the supervised gen_server ..."</span>
-</code></pre></div><h3 id='otp-release'>OTP Release</h3>
+</code></pre></div><h3 id='creating-otp-releases'>Creating OTP Releases</h3>
 <p>If you&#39;re going to be running an LFE application in production, you will very
 likely want to do so using the &quot;release&quot; functionality provided by OTP.</p>
 
@@ -699,7 +704,7 @@ you can start up a release console and then switch to the LFE REPL.</p>
 <span class="err">#</span><span class="nv">Pid&lt;0.351.0&gt;</span>
 <span class="p">(</span><span class="nv">prod-app@spacemac</span><span class="p">)</span><span class="nv">lfe&gt;</span> <span class="p">(</span><span class="nv">prod-lfe:echo</span> <span class="s">"testing from production!"</span><span class="p">)</span>
 <span class="s">"testing from production!"</span>
-</code></pre></div><h2 id='cleanup'>Cleanup</h2>
+</code></pre></div><h2 id='cleanup-commands'>Cleanup Commands</h2>
 <p>There are a handful of tasks the author of the plugin as found useful when
 debugging LFE applications, rebar3 plugins, etc. These include various
 &quot;cleanup&quot; tasks that are not currently supported by <code>rebar3</code> (or whose support
@@ -724,9 +729,11 @@ is problematic).</p>
 <p>Perform all clean tasks as well as remove the files <code>erl_crash.dump</code>, <code>rebar3.crashdump</code>, and <code>rebar.lock</code>:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>rebar3 lfe clean-all
-</code></pre></div><h2 id='metadata'>Metadata</h2>
-<p>The tasks in this section relate to obtaining metadata about a project, LFE,
-the LFE rebar3 plugin, and the Erlang release installed/active on your machine.</p>
+</code></pre></div><h2 id='versions'>Versions</h2>
+<p>It can be very useful to obtain all the important version info for a project:
+your project, LFE, the LFE rebar3 plugin, and the Erlang release
+installed/active on your machine. When submiting a bug or asking for help on
+the LFE Slack, you might very well be asked for this information.</p>
 
 <blockquote>
 <p>Get versions:</p>
