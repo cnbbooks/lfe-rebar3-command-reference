@@ -29,7 +29,12 @@ stop:
 regen:
 	docker exec -it $(CONTAINER_NAME) /bin/bash -c "bundle exec middleman build"
 
-publish:
+book/README.md:
+	echo '# Content for `rebar3_lfe` Command Reference' > book/README.md
+	echo 'Published at [lfe-rebar3.github.io](https://lfe-rebar3.github.io/)' >> book/README.md
+	git add book/README.md
+
+publish: book/README.md
 	-@cd $(PUBLISH_DIR) && \
 	git add images/* && \
 	git commit -am "Regenerated documentation site." > /dev/null && \
