@@ -1,2 +1,2 @@
-# Content for `rebar3_lfe` Command Reference
-Published at [lfe-rebar3.github.io](https://lfe-rebar3.github.io/)
+# Content for The LFE rebar3 Plugin Command Reference
+Published at [lfe.io/reference/lfe-rebar3/](https://lfe.io/reference/lfe-rebar3/)
