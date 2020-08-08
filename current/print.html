@@ -521,15 +521,15 @@ with the server managed in a supervision tree.</p>
 rebar3 lfe repl
 </code></pre>
 <p>Start the app:</p>
-<pre><code class="language-lisp">lfe&gt; (application:ensure_all_started 'myapp)
-#(ok (myapp))
+<pre><code class="language-lisp">lfe&gt; (application:ensure_all_started 'otp-lfe)
+#(ok (otp-lfe))
 </code></pre>
 <p>Make sure the supervisor is running:</p>
-<pre><code class="language-lisp">lfe&gt; (erlang:whereis 'myapp-sup)
+<pre><code class="language-lisp">lfe&gt; (erlang:whereis 'otp-lfe-sup)
 #Pid&lt;0.205.0&gt;
 </code></pre>
 <p>Make an API call to the <code>gen_server</code>:</p>
-<pre><code class="language-lisp">lfe&gt; (myapp:echo &quot;testing the supervised gen_server ...&quot;)
+<pre><code class="language-lisp">lfe&gt; (otp-lfe:echo &quot;testing the supervised gen_server ...&quot;)
 &quot;testing the supervised gen_server ...&quot;
 </code></pre>
 <h1><a class="header" href="#creating-otp-releases" id="creating-otp-releases">Creating OTP Releases</a></h1>
