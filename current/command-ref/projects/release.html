@@ -193,6 +193,12 @@ likely want to do so using the &quot;release&quot; functionality provided by OTP
 ===&gt; Writing prod-lfe/config/sys.config
 ===&gt; Writing prod-lfe/config/vm.args
 </code></pre>
+<p>Change directoy into your new app: </p>
+<pre><code class="language-shell">cd prod-lfe
+</code></pre>
+<p>Build the release:</p>
+<pre><code class="language-shell">rebar3 release
+</code></pre>
 <p>Start up the application:</p>
 <pre><code class="language-shell">rebar3 lfe run-release start
 </code></pre>
